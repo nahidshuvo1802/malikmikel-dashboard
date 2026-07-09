@@ -1,10 +1,10 @@
 "use client";
 
 import { useAppSelector } from "@/store/hooks";
-import { useGetSingleAdminQuery } from "@/store/api/adminApi";
+import { useGetAdminProfileQuery } from "@/store/api/adminApi";
 import { useRouter } from "next/navigation";
 import { Menu, Bell } from "lucide-react";
-import { textPrimary, borderPrimary, sidebarbg } from "@/contexts/theme";
+import { textPrimary, borderPrimary } from "@/contexts/theme";
 import { imgUrl } from "@/store/config/envConfig";
 
 interface MainHeaderProps {
@@ -18,10 +18,8 @@ export default function MainHeader({ toggleSidebar }: MainHeaderProps) {
   const authUser = useAppSelector((state) => state.auth.user);
   
   // Fetch live admin data
-  const { data } = useGetSingleAdminQuery(authUser?._id, {
-    skip: !authUser?._id,
-  });
-
+  const { data } = useGetAdminProfileQuery({});
+ 
   const adminProfile = data?.data || authUser;
   const profileImage = adminProfile?.image ? `${imgUrl}${adminProfile.image.replace(/^\//, "")}` : null;
   const profileName = adminProfile?.name || adminProfile?.fullName || "Admin";
@@ -29,10 +27,10 @@ export default function MainHeader({ toggleSidebar }: MainHeaderProps) {
   
   // Dummy unread count
   const unreadCount = 3;
-
+ 
   return (
     <div className="relative w-full px-5">
-      <header className={`${sidebarbg} shadow-sm rounded-lg border border-[#E5E7EB] overflow-hidden`}>
+      <header className="bg-white shadow-sm rounded-2xl border border-gray-100 overflow-hidden">
         <div className="flex justify-between items-center px-5 md:px-10 h-[80px]">
           <button
             onClick={toggleSidebar}
@@ -57,10 +55,10 @@ export default function MainHeader({ toggleSidebar }: MainHeaderProps) {
             
             <div
               onClick={() => router.push("/admin/profile")}
-              className="flex items-center gap-2 cursor-default"
+              className="flex items-center gap-3 cursor-pointer"
             >
               {/* Avatar */}
-                <div className={`w-8 md:w-12 h-8 md:h-12 rounded-full flex items-center justify-center font-bold text-lg overflow-hidden border ${borderPrimary} bg-blue-200 text-blue-800`}>
+                <div className="w-8 md:w-10 h-8 md:h-10 rounded-xl flex items-center justify-center font-bold text-sm overflow-hidden border border-gray-100 bg-[#2E6F65]/10 text-[#2E6F65] shrink-0 transition-all hover:scale-105 cursor-pointer">
                     {profileImage ? (
                       <img 
                         src={profileImage} 
@@ -75,13 +73,13 @@ export default function MainHeader({ toggleSidebar }: MainHeaderProps) {
                     )}
                 </div>
               
-              <div>
-                <h3 className="hidden md:block text-[#0D0D0D] text-lg font-semibold">
+              <div className="flex flex-col text-left">
+                <span className="hidden md:block text-[#0D0D0D] text-sm font-bold leading-none">
                   {profileName}
-                </h3>
-                <p className="text-[#0D0D0D] text-md capitalize">
+                </span>
+                <span className="text-[10px] text-gray-400 capitalize mt-1 leading-none font-semibold">
                   {profileRole}
-                </p>
+                </span>
               </div>
             </div>
           </div>

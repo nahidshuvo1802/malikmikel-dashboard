@@ -58,7 +58,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }
 
   return (
-    <div className="flex h-screen relative overflow-hidden bg-white">
+    <div className="flex h-screen relative overflow-hidden bg-gray-50/30">
       {/* Mobile Overlay */}
       {isSidebarOpen && (
         <div
@@ -71,7 +71,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       
       <div className="flex flex-col w-full overflow-hidden my-5 h-[calc(100vh-2.5rem)]">
         <MainHeader toggleSidebar={toggleSidebar} />
-        <main className="p-5 bg-white flex-1 overflow-auto">
+        <main className="p-5 bg-gray-50/50 flex-1 overflow-auto">
             {children}
         </main>
       </div>
