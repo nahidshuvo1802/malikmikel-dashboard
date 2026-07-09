@@ -186,7 +186,6 @@ export default function AdminDashboard() {
             <Table>
                 <TableHeader className={` text-black bg-white hover:bg-`}>
                     <TableRow className="border-none hover:bg-transparent">
-                        <TableHead className="text-black font-semibold">S.ID</TableHead>
                         <TableHead className="text-black font-semibold">Full Name</TableHead>
                         <TableHead className="text-black font-semibold">Email</TableHead>
                         <TableHead className="text-black font-semibold">Phone No</TableHead>
@@ -197,13 +196,12 @@ export default function AdminDashboard() {
                 <TableBody>
                     {isLoading ? (
                         <TableRow>
-                            <TableCell colSpan={6} className="text-center py-12">
+                            <TableCell colSpan={5} className="text-center py-12">
                                 <Loader />
                             </TableCell>
                         </TableRow>
                     ) : recentUsers.map((u: any, i: number) => (
                         <TableRow key={u._id || i} className="hover:bg-gray-50 border-b border-gray-100">
-                             <TableCell className="font-medium text-gray-600">{u._id?.slice(-6).toUpperCase()}</TableCell>
                              <TableCell>
                                 <div className="flex items-center gap-3">
                                     <div className="w-8 h-8 rounded-full bg-gray-200 overflow-hidden relative">
