@@ -307,7 +307,7 @@ function FaqModal({ item, onClose, onSuccess }: { item: any; onClose: () => void
             <Input
               value={question}
               onChange={(e) => setQuestion(e.target.value)}
-              placeholder="e.g. What is your refund policy?"
+              placeholder="Enter FAQ question"
               className="h-12 rounded-xl"
               required
             />
@@ -317,7 +317,7 @@ function FaqModal({ item, onClose, onSuccess }: { item: any; onClose: () => void
             <Textarea
               value={answer}
               onChange={(e) => setAnswer(e.target.value)}
-              placeholder="Write a clear, helpful answer..."
+              placeholder="Enter FAQ answer"
               className="min-h-[140px] rounded-xl"
               required
             />

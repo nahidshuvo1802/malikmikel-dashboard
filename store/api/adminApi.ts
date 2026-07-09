@@ -97,6 +97,15 @@ export const adminApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: ["admin"],
         }),
+
+        // Get authenticated admin profile
+        getAdminProfile: builder.query({
+            query: () => ({
+                url: "admin/my-profile",
+                method: "GET",
+            }),
+            providesTags: ["admin"],
+        }),
     }),
 });
 
@@ -111,6 +120,7 @@ export const {
     useResetPasswordAdminMutation,
     useChangePasswordAdminMutation,
     useUpdateAdminPersonalInfoMutation,
+    useGetAdminProfileQuery,
 } = adminApi;
 
 export default adminApi;

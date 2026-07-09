@@ -852,7 +852,7 @@ const AddServiceModal = ({ isOpen, onClose, onSuccess, serviceToEdit }: { isOpen
                      <Input 
                          name="name" 
                          required 
-                         placeholder="Grand Royal Hotel" 
+                         placeholder="Enter service name" 
                          value={hotelName}
                          onChange={(e) => setHotelName(e.target.value)}
                          className="h-12 rounded-xl focus:ring-[#2E6F65] border-gray-200"
@@ -862,7 +862,7 @@ const AddServiceModal = ({ isOpen, onClose, onSuccess, serviceToEdit }: { isOpen
                      <Label className="font-bold text-gray-700">Service Link</Label>
                      <Input 
                          name="serviceLink" 
-                         placeholder="www.exampleservice.com" 
+                         placeholder="Enter service website URL" 
                          value={serviceLink}
                          onChange={(e) => setServiceLink(e.target.value)}
                          className="h-12 rounded-xl focus:ring-[#2E6F65] border-gray-200"
@@ -910,7 +910,7 @@ const AddServiceModal = ({ isOpen, onClose, onSuccess, serviceToEdit }: { isOpen
                   </div>
                   <div className="md:col-span-2 lg:col-span-3 space-y-2">
                     <Label className="font-bold text-gray-700">Description</Label>
-                    <Textarea name="description" defaultValue={serviceToEdit?.description || ""} placeholder="Describe the service, amenities, and unique selling points..." className="min-h-[120px] rounded-2xl border-gray-200" />
+                    <Textarea name="description" defaultValue={serviceToEdit?.description || ""} placeholder="Enter service description" className="min-h-[120px] rounded-2xl border-gray-200" />
                   </div>
                </div>
            </div>

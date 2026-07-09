@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { activeTabClass, buttonbg } from "@/contexts/theme";
 import { 
-  useGetSingleAdminQuery, 
+  useGetAdminProfileQuery, 
   useChangePasswordAdminMutation, 
   useUpdateAdminPersonalInfoMutation 
 } from "@/store/api/adminApi";
@@ -20,7 +20,7 @@ import { getImageUrl } from "@/store/config/envConfig";
 
 export default function ProfilePage() {
   const authUser = useAppSelector((state) => state.auth.user);
-  const { data: rawData, refetch } = useGetSingleAdminQuery(authUser?._id, { skip: !authUser?._id });
+  const { data: rawData, refetch } = useGetAdminProfileQuery({});
   const adminData = rawData?.data || authUser;
   
   const [activeTab, setActiveTab] = useState("edit-profile");
@@ -197,7 +197,7 @@ function EditProfileForm({ adminData, refetch }: { adminData: any, refetch: () =
             value={formData.dateOfBirth} 
             onChange={handleInputChange} 
             className="focus-visible:ring-[#00c0b5]"
-            placeholder="02/02/2000"
+            placeholder="Enter date of birth"
         />
       </div>
       <div className="space-y-2">

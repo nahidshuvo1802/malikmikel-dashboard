@@ -337,7 +337,7 @@ const AddBadgeModal = ({ isOpen, onClose, onSubmit }: { isOpen: boolean; onClose
                   <div className="space-y-4">
                       <div className="space-y-1.5">
                         <Label htmlFor="title" className="font-bold text-gray-700">Badge Title</Label>
-                        <Input id="title" name="title" required placeholder="e.g. Top Rated" className="h-11 rounded-xl" />
+                        <Input id="title" name="title" required placeholder="Enter badge title" className="h-11 rounded-xl" />
                       </div>
                       
                       <div className="flex items-center gap-6 pt-2">
@@ -377,13 +377,13 @@ const AddBadgeModal = ({ isOpen, onClose, onSubmit }: { isOpen: boolean; onClose
 
               <div className="space-y-1.5">
                 <Label htmlFor="introDescription" className="font-bold text-gray-700">Intro Description</Label>
-                <Textarea id="introDescription" name="introDescription" required placeholder="Describe what this badge means..." className="min-h-[100px] rounded-xl resize-none" />
+                <Textarea id="introDescription" name="introDescription" required placeholder="Enter intro description" className="min-h-[100px] rounded-xl resize-none" />
               </div>
 
               {showNote && (
                   <div className="space-y-1.5 animate-in slide-in-from-top-2 duration-200">
                     <Label htmlFor="footerReassuranceText" className="font-bold text-gray-700">Footer Reassurance Text</Label>
-                    <Textarea id="footerReassuranceText" name="footerReassuranceText" placeholder="e.g. Verified by Malik." className="min-h-[80px] rounded-xl resize-none" />
+                    <Textarea id="footerReassuranceText" name="footerReassuranceText" placeholder="Enter footer reassurance text" className="min-h-[80px] rounded-xl resize-none" />
                   </div>
               )}
 
@@ -407,7 +407,7 @@ const AddBadgeModal = ({ isOpen, onClose, onSubmit }: { isOpen: boolean; onClose
                             <Input 
                                 value={item.text} 
                                 onChange={(e) => updateCriteriaText(index, e.target.value)}
-                                placeholder="Criteria text..." 
+                                placeholder="Enter criteria description" 
                                 className="flex-1 h-11 rounded-xl"
                                 required
                             />
@@ -477,7 +477,7 @@ const AddCriteriaModal = ({ isOpen, badgeId, onClose, onSubmit }: { isOpen: bool
                 <form onSubmit={handleSubmit} className="p-6 space-y-5">
                     <div className="space-y-2">
                         <Label htmlFor="text" className="font-bold text-gray-700">Criteria Description</Label>
-                        <Input id="text" name="text" required placeholder="e.g. Background checked" className="h-12 rounded-xl" />
+                        <Input id="text" name="text" required placeholder="Enter criteria description" className="h-12 rounded-xl" />
                     </div>
                     
                     <div className="space-y-2">

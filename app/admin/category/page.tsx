@@ -417,7 +417,7 @@ export default function CategoryPage() {
                 <Label htmlFor="cat-name">Category Name <span className="text-red-500">*</span></Label>
                 <Input
                   id="cat-name"
-                  placeholder="e.g. Restaurants"
+                  placeholder="Enter category name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   disabled={modalMode === "edit"}
@@ -434,7 +434,7 @@ export default function CategoryPage() {
                 <Label htmlFor="cat-desc">Description</Label>
                 <Textarea
                   id="cat-desc"
-                  placeholder="Short description of this category…"
+                  placeholder="Enter category description"
                   className="min-h-[90px] resize-none"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}

@@ -454,7 +454,7 @@ export default function OffersPage() {
                 <div className="space-y-2 col-span-2 md:col-span-1">
                   <Label>Offer Title</Label>
                   <Input
-                    placeholder="e.g. Summer Special"
+                    placeholder="Enter offer title"
                     value={formData.title}
                     onChange={(e) =>
                       setFormData({ ...formData, title: e.target.value })
@@ -466,7 +466,7 @@ export default function OffersPage() {
                   <Label>Discount Percentage (%)</Label>
                   <Input
                     type="number"
-                    placeholder="20"
+                    placeholder="Enter discount percentage"
                     value={formData.discount}
                     onChange={(e) =>
                       setFormData({
@@ -480,7 +480,7 @@ export default function OffersPage() {
                 <div className="space-y-2 col-span-2 md:col-span-1">
                   <Label>Promo Code</Label>
                   <Input
-                    placeholder="e.g. SUMMER20"
+                    placeholder="Enter promo code"
                     value={formData.promocode}
                     onChange={(e) =>
                       setFormData({ ...formData, promocode: e.target.value })
@@ -490,7 +490,7 @@ export default function OffersPage() {
                 <div className="space-y-2 col-span-2">
                   <Label>Service Link</Label>
                   <Input
-                    placeholder="e.g. https://example.com/offer"
+                    placeholder="Enter service link URL"
                     value={formData.serviceLink}
                     onChange={(e) =>
                       setFormData({ ...formData, serviceLink: e.target.value })
@@ -500,7 +500,7 @@ export default function OffersPage() {
                 <div className="space-y-2 col-span-2">
                   <Label>Description</Label>
                   <Textarea
-                    placeholder="Describe the offer details..."
+                    placeholder="Enter offer description"
                     className="min-h-[80px]"
                     value={formData.description}
                     onChange={(e) =>

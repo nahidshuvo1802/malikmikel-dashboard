@@ -87,7 +87,7 @@ function SignInPage() {
                   name="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="enter your gmail"
+                  placeholder="Enter your email"
                   className="w-full px-5 py-3 border-2 border-[#6A6D76] rounded-md outline-none mt-5 placeholder:text-xl"
                   required
                 />

@@ -494,7 +494,7 @@ export default function SubCategoryPage() {
                 <Label htmlFor="sub-name">Name <span className="text-red-500">*</span></Label>
                 <Input
                   id="sub-name"
-                  placeholder="e.g. Ocean Beach"
+                  placeholder="Enter sub-category name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
@@ -523,7 +523,7 @@ export default function SubCategoryPage() {
                 <Label htmlFor="sub-desc">Description</Label>
                 <Textarea
                   id="sub-desc"
-                  placeholder="Short description…"
+                  placeholder="Enter description"
                   className="min-h-[80px] resize-none"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
@@ -535,7 +535,7 @@ export default function SubCategoryPage() {
                 <Label htmlFor="sub-tags">Tags</Label>
                 <Input
                   id="sub-tags"
-                  placeholder="e.g. beach, outdoor, adventure"
+                  placeholder="Enter tags (comma separated)"
                   value={tags}
                   onChange={(e) => setTags(e.target.value)}
                 />

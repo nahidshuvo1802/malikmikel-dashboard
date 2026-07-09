@@ -107,43 +107,43 @@ const AddVendorModal = ({ isOpen, onClose, onSubmit }: { isOpen: boolean; onClos
            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-1">
                 <Label htmlFor="name">Name</Label>
-                <Input id="name" name="name" required placeholder="Malik service" />
+                <Input id="name" name="name" required placeholder="Enter vendor name" />
               </div>
               <div className="space-y-1">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" name="email" type="email" required placeholder="vendor1@gmail.com" />
+                <Input id="email" name="email" type="email" required placeholder="Enter email address" />
               </div>
               <div className="space-y-1">
                 <Label htmlFor="phone">Phone</Label>
-                <Input id="phone" name="phone" required placeholder="0101010101" />
+                <Input id="phone" name="phone" required placeholder="Enter phone number" />
               </div>
               <div className="space-y-1">
                 <Label htmlFor="serviceType">Service Type</Label>
-                <Input id="serviceType" name="serviceType" required placeholder="Catering" />
+                <Input id="serviceType" name="serviceType" required placeholder="Enter service type" />
               </div>
               <div className="space-y-1 md:col-span-2">
                 <Label htmlFor="address">Address</Label>
-                <Input id="address" name="address" required placeholder="123 Street Name" />
+                <Input id="address" name="address" required placeholder="Enter street address" />
               </div>
               <div className="space-y-1">
                 <Label htmlFor="city">City</Label>
-                <Input id="city" name="city" required placeholder="New York" />
+                <Input id="city" name="city" required placeholder="Enter city" />
               </div>
               <div className="space-y-1">
                 <Label htmlFor="state">State</Label>
-                <Input id="state" name="state" required placeholder="state" />
+                <Input id="state" name="state" required placeholder="Enter state" />
               </div>
               <div className="space-y-1">
                 <Label htmlFor="zip">Zip</Label>
-                <Input id="zip" name="zip" required placeholder="10001" />
+                <Input id="zip" name="zip" required placeholder="Enter zip code" />
               </div>
               <div className="space-y-1">
                 <Label htmlFor="country">Country</Label>
-                <Input id="country" name="country" required placeholder="USA" />
+                <Input id="country" name="country" required placeholder="Enter country" />
               </div>
               <div className="space-y-1 md:col-span-2">
                 <Label htmlFor="serviceDescription">Service Description</Label>
-                <Textarea id="serviceDescription" name="serviceDescription" required placeholder="High-quality catering services..." />
+                <Textarea id="serviceDescription" name="serviceDescription" required placeholder="Enter service description" />
               </div>
               <div className="space-y-2 md:col-span-2">
                 <Label>Vendor Image</Label>

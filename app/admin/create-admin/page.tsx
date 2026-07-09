@@ -179,7 +179,7 @@ export default function CreateAdminPage() {
                                 <Input 
                                     id="email" 
                                     type="email" 
-                                    placeholder="admin@malik.com" 
+                                    placeholder="Enter admin email" 
                                     className="h-12 pl-11 rounded-xl bg-gray-50/50 border-gray-100 focus:bg-white transition-all"
                                     value={formData.email}
                                     onChange={(e) => setFormData({...formData, email: e.target.value})}
