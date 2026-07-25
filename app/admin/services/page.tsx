@@ -421,10 +421,63 @@ const ViewServiceModal = ({ isOpen, onClose, service }: { isOpen: boolean; onClo
                                 <MapPin className="w-5 h-5 text-gray-400 shrink-0 mt-0.5" />
                                 <span>{service.address}</span>
                             </p>
-                            <p className="flex items-center gap-3 text-sm text-gray-700">
-                                <Clock className="w-5 h-5 text-gray-400 shrink-0" />
-                                <span>{service.openTime || "N/A"} - {service.closeTime || "N/A"}</span>
-                            </p>
+                            {service.cetagory?.name?.toLowerCase() !== 'events' ? (
+                              <p className="flex items-center gap-3 text-sm text-gray-700">
+                                  <Clock className="w-5 h-5 text-gray-400 shrink-0" />
+                                  <span>{service.openTime || "N/A"} - {service.closeTime || "N/A"}</span>
+                              </p>
+                            ) : (
+                              <>
+                                <p className="flex items-center gap-3 text-sm text-gray-700">
+                                    <Clock className="w-5 h-5 text-gray-400 shrink-0" />
+                                    <span>{service.date ? new Date(service.date).toLocaleDateString() : "N/A"} | {service.startTime || "N/A"} - {service.endTime || "N/A"}</span>
+                                </p>
+                                {service.venue && (
+                                  <p className="flex items-start gap-3 text-sm text-gray-700">
+                                      <MapPin className="w-5 h-5 text-gray-400 shrink-0 mt-0.5" />
+                                      <span><strong>Venue:</strong> {service.venue}</span>
+                                  </p>
+                                )}
+                                {service.ticketPrice && (
+                                  <p className="flex items-start gap-3 text-sm text-gray-700">
+                                      <Tag className="w-5 h-5 text-gray-400 shrink-0 mt-0.5" />
+                                      <span><strong>Tickets:</strong> {service.ticketPrice}</span>
+                                  </p>
+                                )}
+                                {service.organiser && (
+                                  <p className="flex items-start gap-3 text-sm text-gray-700">
+                                      <Globe className="w-5 h-5 text-gray-400 shrink-0 mt-0.5" />
+                                      <span><strong>Organiser:</strong> {service.organiser}</span>
+                                  </p>
+                                )}
+                                {service.ageRestriction && (
+                                  <p className="flex items-start gap-3 text-sm text-gray-700">
+                                      <span className="w-5 h-5 flex items-center justify-center text-gray-400 shrink-0 text-xs font-bold mt-0.5 border border-gray-400 rounded">18+</span>
+                                      <span><strong>Age:</strong> {service.ageRestriction}</span>
+                                  </p>
+                                )}
+                                {service.dressCode && (
+                                  <p className="flex items-start gap-3 text-sm text-gray-700">
+                                      <span className="w-5 h-5 text-gray-400 shrink-0 flex items-center justify-center mt-0.5">👕</span>
+                                      <span><strong>Dress Code:</strong> {service.dressCode}</span>
+                                  </p>
+                                )}
+                                {service.parkingInfo && (
+                                  <p className="flex items-start gap-3 text-sm text-gray-700">
+                                      <span className="w-5 h-5 text-gray-400 shrink-0 flex items-center justify-center mt-0.5">🅿️</span>
+                                      <span><strong>Parking/Transport:</strong> {service.parkingInfo}</span>
+                                  </p>
+                                )}
+                                {service.ticketLink && (
+                                  <p className="flex items-center gap-3 text-sm text-gray-700">
+                                      <Globe className="w-5 h-5 text-gray-400 shrink-0" />
+                                      <a href={service.ticketLink.startsWith('http') ? service.ticketLink : `https://${service.ticketLink}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                                          Book Tickets
+                                      </a>
+                                  </p>
+                                )}
+                              </>
+                            )}
                             <p className="flex items-center gap-3 text-sm text-gray-700">
                                 <Star className="w-5 h-5 text-yellow-500 fill-current shrink-0" />
                                 <span><span className="font-bold text-gray-900">{service.averageRating?.toFixed(1) || "0.0"}</span> ({service.totalReviews || 0} reviews)</span>
@@ -471,7 +524,7 @@ const ViewServiceModal = ({ isOpen, onClose, service }: { isOpen: boolean; onClo
             </div>
             
             {/* Reviews */}
-            {service.reviews?.length > 0 && (
+            {service.cetagory?.name?.toLowerCase() !== 'events' && service.reviews?.length > 0 && (
                 <div className="pt-4">
                     <h3 className="text-lg font-bold text-gray-800 border-b pb-2 mb-4 flex items-center gap-2"><Star className="w-4 h-4 text-yellow-500 fill-current" /> Top Reviews from Maps</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -722,6 +775,13 @@ const AddServiceModal = ({ isOpen, onClose, onSuccess, serviceToEdit }: { isOpen
             startTime: formatTimeToAMPM(mainFormData.get("startTime")),
             endTime: formatTimeToAMPM(mainFormData.get("endTime")),
             date: mainFormData.get("date"),
+            venue: mainFormData.get("venue"),
+            ticketPrice: mainFormData.get("ticketPrice"),
+            ticketLink: mainFormData.get("ticketLink"),
+            organiser: mainFormData.get("organiser"),
+            ageRestriction: mainFormData.get("ageRestriction"),
+            dressCode: mainFormData.get("dressCode"),
+            parkingInfo: mainFormData.get("parkingInfo"),
         };
 
         // Add offer if selected
@@ -1045,6 +1105,34 @@ const AddServiceModal = ({ isOpen, onClose, onSuccess, serviceToEdit }: { isOpen
                        <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
                          <Label className="font-bold text-gray-700">Ending Time</Label>
                          <Input type="time" name="endTime" defaultValue={serviceToEdit?.endTime || ""} className="h-12 rounded-xl border-[#2E6F65]/30 bg-green-50/30" />
+                       </div>
+                       <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
+                         <Label className="font-bold text-gray-700">Venue</Label>
+                         <Input type="text" name="venue" defaultValue={serviceToEdit?.venue || ""} placeholder="Event Venue" className="h-12 rounded-xl border-[#2E6F65]/30 bg-green-50/30" />
+                       </div>
+                       <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
+                         <Label className="font-bold text-gray-700">Ticket Price</Label>
+                         <Input type="text" name="ticketPrice" defaultValue={serviceToEdit?.ticketPrice || ""} placeholder="e.g. Free, $50" className="h-12 rounded-xl border-[#2E6F65]/30 bg-green-50/30" />
+                       </div>
+                       <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
+                         <Label className="font-bold text-gray-700">Ticket Link</Label>
+                         <Input type="url" name="ticketLink" defaultValue={serviceToEdit?.ticketLink || ""} placeholder="https://..." className="h-12 rounded-xl border-[#2E6F65]/30 bg-green-50/30" />
+                       </div>
+                       <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
+                         <Label className="font-bold text-gray-700">Organiser</Label>
+                         <Input type="text" name="organiser" defaultValue={serviceToEdit?.organiser || ""} placeholder="Organiser Name" className="h-12 rounded-xl border-[#2E6F65]/30 bg-green-50/30" />
+                       </div>
+                       <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
+                         <Label className="font-bold text-gray-700">Age Restriction</Label>
+                         <Input type="text" name="ageRestriction" defaultValue={serviceToEdit?.ageRestriction || ""} placeholder="e.g. 18+" className="h-12 rounded-xl border-[#2E6F65]/30 bg-green-50/30" />
+                       </div>
+                       <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
+                         <Label className="font-bold text-gray-700">Dress Code</Label>
+                         <Input type="text" name="dressCode" defaultValue={serviceToEdit?.dressCode || ""} placeholder="e.g. Smart Casual" className="h-12 rounded-xl border-[#2E6F65]/30 bg-green-50/30" />
+                       </div>
+                       <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300 lg:col-span-2">
+                         <Label className="font-bold text-gray-700">Parking / Transport Info</Label>
+                         <Textarea name="parkingInfo" defaultValue={serviceToEdit?.parkingInfo || ""} placeholder="Details about parking or transport..." className="min-h-[80px] rounded-xl border-[#2E6F65]/30 bg-green-50/30" />
                        </div>
                      </>
                    )}
