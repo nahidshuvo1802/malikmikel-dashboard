@@ -59,10 +59,9 @@ import { toast } from "sonner";
 import { setOptions, importLibrary } from "@googlemaps/js-api-loader";
 import { getImageUrl } from "@/store/config/envConfig";
 
-// const GOOGLE_MAPS_API_KEY = "AIzaSyBuSZJklSc1j0D4kqhkJcmyArcZbWujbXQ";
-const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "";
 
-console.log(process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY, "google map key now asdf");
+console.log(process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ? "Using env google map key" : "Missing google map key");
 
 setOptions({
   key: GOOGLE_MAPS_API_KEY,
@@ -658,7 +657,6 @@ const AddServiceModal = ({ isOpen, onClose, onSuccess, serviceToEdit }: { isOpen
       if (!inputElement) return;
 
       const autocomplete = new google.maps.places.Autocomplete(inputElement, {
-        types: ["establishment"],
         fields: ["name", "formatted_address", "geometry", "rating", "user_ratings_total", "reviews", "opening_hours"]
       });
 
