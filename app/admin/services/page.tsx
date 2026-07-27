@@ -61,7 +61,7 @@ import { getImageUrl } from "@/store/config/envConfig";
 
 const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "";
 
-console.log(process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ? "Using env google map key" : "Missing google map key");
+console.log(process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ? `Using env google map key : ${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}` : "Missing google map key");
 
 setOptions({
   key: GOOGLE_MAPS_API_KEY,
