@@ -24,8 +24,6 @@ export const url = `${imgUrl}api/v1/`;
 //   password: `${process.env.NEXT_PUBLIC_GUEST_USER_PASSWORD}`
 // };
 
-console.log(imgUrl, "asdf");
-
 // 🔥 WebSocket base URL (auto picks wss:// if https page, ws:// otherwise)
 // const wsProtocol = window.location.protocol === "https:" ? "wss" : "ws";
 // export const wsUrl = `${wsProtocol}://${new URL(imgUrl).host}`;
