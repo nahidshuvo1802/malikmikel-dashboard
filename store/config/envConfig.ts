@@ -26,7 +26,7 @@ export const url = `${imgUrl}api/v1/`;
 
 console.log(imgUrl, "asdf");
 
-// new comment
+
 
 // 🔥 WebSocket base URL (auto picks wss:// if https page, ws:// otherwise)
 // const wsProtocol = window.location.protocol === "https:" ? "wss" : "ws";
