@@ -909,7 +909,7 @@ export const AddServiceModal = ({
                       Ticket Link
                     </Label>
                     <Input
-                      type="url"
+                      type="text"
                       name="ticketLink"
                       defaultValue={serviceToEdit?.ticketLink || ""}
                       placeholder="https://..."
