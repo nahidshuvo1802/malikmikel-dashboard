@@ -69,9 +69,19 @@ type ApiOffer = {
   image: string | null;
   status: "active" | "inactive";
   createdAt: string;
+  Refinements?: {
+    title: string;
+    images: string[];
+  }[];
 };
 
 type ModalMode = "create" | "edit";
+
+type RefinementState = {
+  title: string;
+  imageFiles: File[];
+  existingImages: string[];
+};
 
 export default function OffersPage() {
   const { user, isAuthenticated } = useAuth();
@@ -120,6 +130,8 @@ export default function OffersPage() {
     imagePreview: null as string | null,
   });
 
+  const [refinements, setRefinements] = useState<RefinementState[]>([]);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -146,6 +158,7 @@ export default function OffersPage() {
       imageFile: null,
       imagePreview: null,
     });
+    setRefinements([]);
     setIsModalOpen(true);
   };
 
@@ -170,6 +183,11 @@ export default function OffersPage() {
       imageFile: null,
       imagePreview: offer.image ? getImageUrl(offer.image) : null,
     });
+    setRefinements(offer.Refinements?.map(r => ({
+      title: r.title || "",
+      imageFiles: [],
+      existingImages: r.images || []
+    })) || []);
     setIsModalOpen(true);
   };
 
@@ -207,6 +225,18 @@ export default function OffersPage() {
     if (formData.imageFile) {
       submitData.append("image", formData.imageFile);
     }
+
+    const refinementsData = refinements.map(r => ({
+      title: r.title,
+      images: r.existingImages
+    }));
+    submitData.append("Refinements", JSON.stringify(refinementsData));
+
+    refinements.forEach((ref, index) => {
+      ref.imageFiles.forEach(file => {
+        submitData.append(`refinement_image_${index}`, file);
+      });
+    });
 
     try {
       if (modalMode === "create") {
@@ -471,7 +501,7 @@ export default function OffersPage() {
                     onChange={(e) =>
                       setFormData({
                         ...formData,
-                        discount: parseInt(e.target.value),
+                        discount: e.target.value === "" ? 0 : parseInt(e.target.value),
                       })
                     }
                     required
@@ -578,6 +608,102 @@ export default function OffersPage() {
                   accept="image/*"
                   onChange={handleImageChange}
                 />
+              </div>
+
+              {/* Refinements Section */}
+              <div className="space-y-4 col-span-2">
+                <div className="flex items-center justify-between">
+                  <Label className="text-lg font-bold text-gray-700">Refinements</Label>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setRefinements([...refinements, { title: "", imageFiles: [], existingImages: [] }])}
+                    className="gap-2"
+                  >
+                    <Plus className="w-4 h-4" /> Add Refinement
+                  </Button>
+                </div>
+                
+                {refinements.map((ref, idx) => (
+                  <div key={idx} className="p-4 border rounded-xl bg-gray-50 space-y-4 relative group">
+                    <button
+                      type="button"
+                      onClick={() => setRefinements(refinements.filter((_, i) => i !== idx))}
+                      className="absolute top-2 right-2 p-1.5 bg-red-100 text-red-600 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                    
+                    <div className="space-y-2">
+                      <Label>Title</Label>
+                      <Input
+                        placeholder="Refinement Title"
+                        value={ref.title}
+                        onChange={(e) => {
+                          const newRefs = [...refinements];
+                          newRefs[idx].title = e.target.value;
+                          setRefinements(newRefs);
+                        }}
+                        required
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label>Images</Label>
+                      <div className="flex flex-wrap gap-2">
+                        {ref.existingImages.map((img, imgIdx) => (
+                          <div key={`existing-${imgIdx}`} className="relative w-20 h-20 rounded-lg overflow-hidden border">
+                            <Image src={getImageUrl(img)} alt="Refinement" fill className="object-cover" />
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const newRefs = [...refinements];
+                                newRefs[idx].existingImages = newRefs[idx].existingImages.filter((_, i) => i !== imgIdx);
+                                setRefinements(newRefs);
+                              }}
+                              className="absolute top-1 right-1 bg-red-500 text-white p-0.5 rounded-full"
+                            >
+                              <X className="w-3 h-3" />
+                            </button>
+                          </div>
+                        ))}
+                        {ref.imageFiles.map((file, fileIdx) => (
+                          <div key={`new-${fileIdx}`} className="relative w-20 h-20 rounded-lg overflow-hidden border">
+                            <Image src={URL.createObjectURL(file)} alt="New Refinement" fill className="object-cover" />
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const newRefs = [...refinements];
+                                newRefs[idx].imageFiles = newRefs[idx].imageFiles.filter((_, i) => i !== fileIdx);
+                                setRefinements(newRefs);
+                              }}
+                              className="absolute top-1 right-1 bg-red-500 text-white p-0.5 rounded-full"
+                            >
+                              <X className="w-3 h-3" />
+                            </button>
+                          </div>
+                        ))}
+                        <label className="w-20 h-20 flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-[#2E6F65] hover:bg-white transition-colors">
+                          <Plus className="w-6 h-6 text-gray-400" />
+                          <input
+                            type="file"
+                            multiple
+                            accept="image/*"
+                            className="hidden"
+                            onChange={(e) => {
+                              if (e.target.files) {
+                                const newRefs = [...refinements];
+                                newRefs[idx].imageFiles = [...newRefs[idx].imageFiles, ...Array.from(e.target.files)];
+                                setRefinements(newRefs);
+                              }
+                            }}
+                          />
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
 
               <div className="flex gap-4 pt-4">
