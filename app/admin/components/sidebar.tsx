@@ -21,6 +21,8 @@ import {
     HelpCircle,
     Award,
     Star,
+    TrendingUp,
+    Smartphone,
 } from "lucide-react";
 import Image from "next/image";
 import {
@@ -62,6 +64,7 @@ export default function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
 
   const navItems = [
     { name: "Dashboard",       path: "/admin/dashboard",       icon: LayoutDashboard },
+    { name: "Analytics",       path: "/admin/analytics",       icon: TrendingUp },
     { name: "Users",           path: "/admin/users",           icon: Users },
     { name: "Vendors",         path: "/admin/vendors",         icon: Store },
     { name: "Badges",         path: "/admin/badges",         icon: Award },
@@ -69,6 +72,7 @@ export default function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
     { name: "SubCategory",     path: "/admin/sub-category",    icon: Store },
     { name: "Offers",          path: "/admin/offers",          icon: DollarSign },
     { name: "Services",        path: "/admin/services",        icon: Luggage },
+    { name: "E-Sim",           path: "/admin/esim",            icon: Smartphone },
     { name: "Faq",             path: "/admin/faq",             icon: HelpCircle },
     { name: "Report",          path: "/admin/report",          icon: BarChart },
     { name: "Reviews",         path: "/admin/review",          icon: Star },
