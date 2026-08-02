@@ -14,6 +14,7 @@ import {
   useUpdateEsimProviderMutation,
   useDeleteEsimProviderMutation,
 } from "@/store/api/esimApi";
+import { getImageUrl } from "@/store/config/envConfig";
 import { Plus, Edit, Trash2, X, Image as ImageIcon } from "lucide-react";
 import Image from "next/image";
 
@@ -74,7 +75,7 @@ export default function EsimManagementPage() {
       setProviderDescription(provider.description || "");
       setProviderLink(provider.link);
       setIsSpecialOffer(provider.isSpecialOffer || false);
-      setLogoPreview(provider.logo ? `${process.env.NEXT_PUBLIC_API_URL?.replace('/api/v1', '') || 'http://localhost:5000'}${provider.logo}` : "");
+      setLogoPreview(provider.logo ? getImageUrl(provider.logo) : "");
       setProviderLogo(null);
     } else {
       setEditingProvider(null);
@@ -231,7 +232,7 @@ export default function EsimManagementPage() {
                             {provider.logo ? (
                               <div className="w-12 h-12 relative rounded-md overflow-hidden bg-gray-100 border border-gray-200">
                                 <Image 
-                                  src={`${process.env.NEXT_PUBLIC_API_URL?.replace('/api/v1', '') || 'http://localhost:5000'}${provider.logo}`} 
+                                  src={getImageUrl(provider.logo)} 
                                   alt={provider.name} 
                                   fill 
                                   className="object-cover" 
