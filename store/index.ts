@@ -1,5 +1,5 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { setupListeners } from '@reduxjs/toolkit/query';
+import { configureStore } from "@reduxjs/toolkit";
+import { setupListeners } from "@reduxjs/toolkit/query";
 import {
   persistStore,
   persistReducer,
@@ -9,13 +9,13 @@ import {
   PERSIST,
   PURGE,
   REGISTER,
-} from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
-import authReducer from './authSlice';
-import { baseApi } from './api/baseApi';
+} from "redux-persist";
+import storage from "redux-persist/lib/storage";
+import authReducer from "./authSlice";
+import { baseApi } from "./api/baseApi";
 
 const persistConfig = {
-  key: 'auth',
+  key: "auth",
   storage,
 };
 
