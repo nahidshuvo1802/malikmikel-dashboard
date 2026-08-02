@@ -930,13 +930,18 @@ export const AddServiceModal = ({
                     <Label className="font-bold text-gray-700">
                       Age Restriction
                     </Label>
-                    <Input
-                      type="text"
+                    <select
                       name="ageRestriction"
                       defaultValue={serviceToEdit?.ageRestriction || ""}
-                      placeholder="e.g. 18+"
-                      className="h-12 rounded-xl border-[#2E6F65]/30 bg-green-50/30"
-                    />
+                      className="w-full h-12 rounded-xl border border-[#2E6F65]/30 bg-green-50/30 px-3 outline-none focus:ring-2 focus:ring-[#2E6F65]/50"
+                    >
+                      <option value="" disabled>Select Age Restriction</option>
+                      <option value="All Ages">All Ages</option>
+                      <option value="Family Friendly">Family Friendly</option>
+                      <option value="16+">16+</option>
+                      <option value="18+">18+</option>
+                      <option value="21+">21+</option>
+                    </select>
                   </div>
                   <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
                     <Label className="font-bold text-gray-700">
