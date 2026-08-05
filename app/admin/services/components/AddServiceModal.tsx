@@ -23,6 +23,7 @@ import {
   useCreateServiceMutation,
   useUpdateServiceMutation,
 } from "@/store/api/serviceApi";
+import { useGetAllBadgesQuery } from "@/store/api/badgeApi";
 import { toast } from "sonner";
 import { importLibrary } from "@googlemaps/js-api-loader";
 import { getImageUrl } from "@/store/config/envConfig";
@@ -76,6 +77,10 @@ export const AddServiceModal = ({
   const offers = offersResponse?.data || [];
   const [selectedOfferId, setSelectedOfferId] = useState("");
 
+  const { data: badgesResponse } = useGetAllBadgesQuery({ limit: 100 });
+  const allBadges = badgesResponse?.badges || [];
+  const [selectedBadgeIds, setSelectedBadgeIds] = useState<string[]>([]);
+
   const [createService] = useCreateServiceMutation();
   const [updateService] = useUpdateServiceMutation();
 
@@ -102,6 +107,9 @@ export const AddServiceModal = ({
         setSelectedCategoryName(serviceToEdit.cetagory?.name || "");
         setSelectedSubCategoryId(serviceToEdit.subCetagory?._id || "");
         setSelectedOfferId(serviceToEdit.offer?._id || "");
+        setSelectedBadgeIds(
+          serviceToEdit.badges?.map((b: any) => b._id || b) || []
+        );
 
         setPreviews({
           main: serviceToEdit.image ? getImageUrl(serviceToEdit.image) : null,
@@ -124,6 +132,7 @@ export const AddServiceModal = ({
         setSelectedCategoryName("");
         setSelectedSubCategoryId("");
         setSelectedOfferId("");
+        setSelectedBadgeIds([]);
         setPreviews({ main: null, visitors: [], menu: [] });
       }
     }
@@ -381,6 +390,11 @@ export const AddServiceModal = ({
       // Add offer if selected
       if (selectedOfferId) {
         data.offer = selectedOfferId;
+      }
+
+      // Add badges if selected
+      if (selectedBadgeIds.length > 0) {
+        data.badges = selectedBadgeIds;
       }
 
       // Add reviews and ratings if available
@@ -1001,6 +1015,52 @@ export const AddServiceModal = ({
                 <p className="text-xs text-gray-500 italic">
                   Select an offer to apply it to this service. Choose "No Active
                   Offer" to disable.
+                </p>
+              </div>
+
+              <div className="md:col-span-2 space-y-3 pt-2">
+                <Label className="font-bold text-gray-700">
+                  Select Badges
+                </Label>
+                {allBadges.length === 0 ? (
+                  <p className="text-sm text-gray-400 italic bg-gray-50 p-4 rounded-xl border border-dashed border-gray-200">No badges available.</p>
+                ) : (
+                  <div className="flex flex-wrap gap-2">
+                    {allBadges.map((badge: any) => {
+                      const isSelected = selectedBadgeIds.includes(badge._id);
+                      return (
+                        <div
+                          key={badge._id}
+                          onClick={() => {
+                            if (isSelected) {
+                              setSelectedBadgeIds((prev) =>
+                                prev.filter((id) => id !== badge._id)
+                              );
+                            } else {
+                              setSelectedBadgeIds((prev) => [...prev, badge._id]);
+                            }
+                          }}
+                          className={`px-4 py-2.5 rounded-xl border cursor-pointer font-bold text-sm transition-all flex items-center gap-2 select-none ${
+                            isSelected
+                              ? "bg-[#2E6F65] border-[#2E6F65] text-white shadow-md shadow-[#2E6F65]/20"
+                              : "bg-white border-gray-200 text-gray-600 hover:border-[#2E6F65]/50 hover:bg-green-50"
+                          }`}
+                        >
+                          {badge.icon && (
+                            <img
+                              src={getImageUrl(badge.icon)}
+                              alt=""
+                              className="w-5 h-5 rounded-full object-cover bg-white"
+                            />
+                          )}
+                          {badge.title}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+                <p className="text-xs text-gray-500 italic mt-1">
+                  Click on the badges to select or deselect them for this service.
                 </p>
               </div>
             </div>
