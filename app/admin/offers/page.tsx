@@ -58,7 +58,7 @@ type ApiOffer = {
     _id: string;
     name: string;
   };
-  offerCetagory?: "Hotel" | "Transport" | "Others";
+  offerCetagory?: "Hotel" | "Eat & Drink" | "Experiences" | "Events" | "Transport" | "Accommodation" | "Others";
   title: string;
   description: string;
   discount: number;
@@ -68,6 +68,7 @@ type ApiOffer = {
   endTime?: string;
   image: string | null;
   status: "active" | "inactive";
+  isFeatured?: boolean;
   createdAt: string;
   Refinements?: {
     title: string;
@@ -126,6 +127,7 @@ export default function OffersPage() {
     startTime: "",
     endTime: "",
     status: "active" as "active" | "inactive",
+    isFeatured: false,
     imageFile: null as File | null,
     imagePreview: null as string | null,
   });
@@ -155,6 +157,7 @@ export default function OffersPage() {
       startTime: "",
       endTime: "",
       status: "active",
+      isFeatured: false,
       imageFile: null,
       imagePreview: null,
     });
@@ -180,6 +183,7 @@ export default function OffersPage() {
         ? new Date(offer.endTime).toISOString().slice(0, 16)
         : "",
       status: offer.status,
+      isFeatured: offer.isFeatured || false,
       imageFile: null,
       imagePreview: offer.image ? getImageUrl(offer.image) : null,
     });
@@ -221,6 +225,7 @@ export default function OffersPage() {
       submitData.append("endTime", new Date(formData.endTime).toISOString());
     }
     submitData.append("status", formData.status);
+    submitData.append("isFeatured", formData.isFeatured.toString());
 
     if (formData.imageFile) {
       submitData.append("image", formData.imageFile);
@@ -476,8 +481,11 @@ export default function OffersPage() {
                       setFormData({ ...formData, offerCetagory: e.target.value })
                     }
                   >
-                    <option value="Hotel">Hotel</option>
+                    <option value="Eat & Drink">Eat & Drink</option>
+                    <option value="Experiences">Experiences</option>
+                    <option value="Events">Events</option>
                     <option value="Transport">Transport</option>
+                    <option value="Accommodation">Accommodation</option>
                     <option value="Others">Others</option>
                   </select>
                 </div>
@@ -576,6 +584,20 @@ export default function OffersPage() {
                     <option value="active">Active</option>
                     <option value="inactive">Inactive</option>
                   </select>
+                </div>
+                <div className="space-y-2 col-span-2 flex items-center gap-3">
+                  <input
+                    type="checkbox"
+                    id="isFeatured"
+                    checked={formData.isFeatured}
+                    onChange={(e) =>
+                      setFormData({ ...formData, isFeatured: e.target.checked })
+                    }
+                    className="w-5 h-5 rounded border-gray-300 text-[#2E6F65] focus:ring-[#2E6F65] cursor-pointer"
+                  />
+                  <Label htmlFor="isFeatured" className="font-bold text-gray-700 cursor-pointer select-none">
+                    Feature this on Homepage (Featured Section)
+                  </Label>
                 </div>
               </div>
 

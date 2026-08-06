@@ -49,5 +49,6 @@ export const baseApi = createApi({
     "report",
     "admin",
     "Offer",
+    "Featured",
   ],
 });

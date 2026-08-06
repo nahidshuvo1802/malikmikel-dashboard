@@ -72,6 +72,7 @@ export default function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
     { name: "SubCategory",     path: "/admin/sub-category",    icon: Store },
     { name: "Offers",          path: "/admin/offers",          icon: DollarSign },
     { name: "Services",        path: "/admin/services",        icon: Luggage },
+    { name: "Featured",        path: "/admin/featured",        icon: Star },
     { name: "E-Sim",           path: "/admin/esim",            icon: Smartphone },
     { name: "Faq",             path: "/admin/faq",             icon: HelpCircle },
     { name: "Report",          path: "/admin/report",          icon: BarChart },

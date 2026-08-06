@@ -37,6 +37,7 @@ export const categoryApi = baseApi.injectEndpoints({
             invalidatesTags: ["category"],
         }),
     }),
+    overrideExisting: true,
 });
 
 export const {

@@ -80,6 +80,7 @@ export const AddServiceModal = ({
   const { data: badgesResponse } = useGetAllBadgesQuery({ limit: 100 });
   const allBadges = badgesResponse?.badges || [];
   const [selectedBadgeIds, setSelectedBadgeIds] = useState<string[]>([]);
+  const [isFeatured, setIsFeatured] = useState(false);
 
   const [createService] = useCreateServiceMutation();
   const [updateService] = useUpdateServiceMutation();
@@ -110,6 +111,7 @@ export const AddServiceModal = ({
         setSelectedBadgeIds(
           serviceToEdit.badges?.map((b: any) => b._id || b) || []
         );
+        setIsFeatured(serviceToEdit.isFeatured || false);
 
         setPreviews({
           main: serviceToEdit.image ? getImageUrl(serviceToEdit.image) : null,
@@ -133,6 +135,7 @@ export const AddServiceModal = ({
         setSelectedSubCategoryId("");
         setSelectedOfferId("");
         setSelectedBadgeIds([]);
+        setIsFeatured(false);
         setPreviews({ main: null, visitors: [], menu: [] });
       }
     }
@@ -385,6 +388,7 @@ export const AddServiceModal = ({
         ageRestriction: mainFormData.get("ageRestriction"),
         dressCode: mainFormData.get("dressCode"),
         parkingInfo: mainFormData.get("parkingInfo"),
+        isFeatured: isFeatured,
       };
 
       // Add offer if selected
@@ -1115,6 +1119,21 @@ export const AddServiceModal = ({
                 </div>
               )}
             </div>
+          </div>
+
+          {/* Section: Feature on Homepage */}
+          <div className="pt-6 border-t border-gray-100 flex items-center gap-3 animate-in fade-in duration-300">
+            <input
+              type="checkbox"
+              id="isFeatured"
+              name="isFeatured"
+              checked={isFeatured}
+              onChange={(e) => setIsFeatured(e.target.checked)}
+              className="w-5 h-5 rounded border-gray-300 text-[#2E6F65] focus:ring-[#2E6F65] cursor-pointer"
+            />
+            <Label htmlFor="isFeatured" className="font-bold text-gray-700 cursor-pointer select-none">
+              Feature this on Homepage (Featured Section)
+            </Label>
           </div>
 
           {/* Section: Top Reviews (Auto populated) */}

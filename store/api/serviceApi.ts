@@ -60,7 +60,17 @@ export const serviceApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: ["service"],
         }),
+
+        // Get weekly featured services
+        getWeeklyFeaturedServices: builder.query({
+            query: () => ({
+                url: "service/weekly-featured-services",
+                method: "GET",
+            }),
+            providesTags: ["service"],
+        }),
     }),
+    overrideExisting: true,
 });
 
 export const {
@@ -68,6 +78,7 @@ export const {
     useCreateServiceMutation,
     useUpdateServiceMutation,
     useDeleteServiceMutation,
+    useGetWeeklyFeaturedServicesQuery,
 } = serviceApi;
 
 export default serviceApi;
