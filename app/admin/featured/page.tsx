@@ -8,14 +8,17 @@ import {
   Star,
   RefreshCw,
   AlertCircle,
+  Trash2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { buttonbg } from "@/contexts/theme";
 import { useAuth } from "@/contexts/auth-context";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 // RTK Query Slices
-import { useGetWeeklyFeaturedServicesQuery } from "@/store/api/serviceApi";
+import { useGetWeeklyFeaturedServicesQuery, useUpdateServiceMutation } from "@/store/api/serviceApi";
+import { useUpdateOfferMutation } from "@/store/api/offerApi";
 
 type SectionTab =
   | "featured_eat&drink"
@@ -43,6 +46,35 @@ export default function FeaturedManagementPage() {
     isError: isFeaturedError,
     refetch: refetchFeatured,
   } = useGetWeeklyFeaturedServicesQuery(undefined);
+
+  const [updateService] = useUpdateServiceMutation();
+  const [updateOffer] = useUpdateOfferMutation();
+
+  const handleUnfeatureService = async (id: string) => {
+    try {
+      const formDataToSend = new FormData();
+      formDataToSend.append("isFeatured", "false");
+      
+      await updateService({ id, formData: formDataToSend }).unwrap();
+      toast.success("Item removed from featured list");
+      refetchFeatured();
+    } catch (err: any) {
+      toast.error(err?.data?.message || "Failed to remove item");
+    }
+  };
+
+  const handleUnfeatureOffer = async (id: string) => {
+    try {
+      const formDataToSend = new FormData();
+      formDataToSend.append("isFeatured", "false");
+      
+      await updateOffer({ id, data: formDataToSend }).unwrap();
+      toast.success("Item removed from featured list");
+      refetchFeatured();
+    } catch (err: any) {
+      toast.error(err?.data?.message || "Failed to remove item");
+    }
+  };
 
   // Local state to store items currently in active tab
   const [currentItems, setCurrentItems] = useState<any[]>([]);
@@ -84,7 +116,7 @@ export default function FeaturedManagementPage() {
       const allItems = featuredResponse.data || [];
       
       const filtered = allItems.filter((item: any) => {
-        if (!item) return false;
+        if (!item || item.isFeatured !== true) return false;
         
         if (activeTab === "featured_offers") {
           return isOffer(item);
@@ -245,6 +277,24 @@ export default function FeaturedManagementPage() {
                           {subDetails}
                         </p>
                       </div>
+                    </div>
+
+                    {/* Controls */}
+                    <div className="flex items-center gap-2">
+                      <Button
+                        onClick={() => {
+                          if (isOffer(item)) {
+                            handleUnfeatureOffer(item._id);
+                          } else {
+                            handleUnfeatureService(item._id);
+                          }
+                        }}
+                        variant="ghost"
+                        size="icon"
+                        className="w-9 h-9 rounded-lg text-red-500 hover:text-red-600 hover:bg-red-50"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
                     </div>
                   </div>
                 );
