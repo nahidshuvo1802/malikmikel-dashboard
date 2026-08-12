@@ -17,10 +17,44 @@ const termsAndConditionsApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["termsAndConditions"],
     }),
+    getLegalPolicies: builder.query({
+      query: () => ({
+        url: "legalDoc/get-doc/legalPolicies",
+        method: "GET",
+      }),
+      providesTags: ["legalPolicies"],
+    }),
+    updateLegalPolicies: builder.mutation({
+      query: (data) => ({
+        url: "legalDoc/create-doc/legalPolicies",
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["legalPolicies"],
+    }),
+    getDeleteAccount: builder.query({
+      query: () => ({
+        url: "legalDoc/get-doc/deleteAccount",
+        method: "GET",
+      }),
+      providesTags: ["deleteAccount"],
+    }),
+    updateDeleteAccount: builder.mutation({
+      query: (data) => ({
+        url: "legalDoc/create-doc/deleteAccount",
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["deleteAccount"],
+    }),
   }),
 });
 
 export const {
   useGetTermsAndConditionsQuery,
   useUpdateTermsAndConditionsMutation,
+  useGetLegalPoliciesQuery,
+  useUpdateLegalPoliciesMutation,
+  useGetDeleteAccountQuery,
+  useUpdateDeleteAccountMutation,
 } = termsAndConditionsApi;

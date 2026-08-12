@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
 import {
   Table,
   TableBody,
@@ -150,9 +151,10 @@ function FaqSection() {
         <Table>
           <TableHeader>
             <TableRow className="border-b border-[#2E6F65]/20 hover:bg-transparent">
-              <TableHead className={`font-bold py-4 pl-6 ${textPrimary}`}>#</TableHead>
+              <TableHead className={`font-bold py-4 pl-6 ${textPrimary}`}>Order</TableHead>
               <TableHead className={`font-bold py-4 ${textPrimary}`}>Question</TableHead>
               <TableHead className={`font-bold py-4 ${textPrimary}`}>Answer</TableHead>
+              <TableHead className={`font-bold py-4 ${textPrimary}`}>Status</TableHead>
               <TableHead className={`font-bold py-4 pr-6 text-right ${textPrimary}`}>Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -171,13 +173,18 @@ function FaqSection() {
             ) : faqs.map((faq: any, i: number) => (
               <TableRow key={faq._id} className="hover:bg-gray-50 border-b border-gray-100 last:border-0 group">
                 <TableCell className="pl-6 font-medium text-gray-500 py-4">
-                  {((page - 1) * 10 + i + 1).toString().padStart(2, "0")}
+                  {faq.order ?? 0}
                 </TableCell>
                 <TableCell className="py-4 font-semibold text-gray-800 max-w-[280px]">
                   {faq.question}
                 </TableCell>
                 <TableCell className="py-4 text-gray-500 max-w-[380px] truncate">
                   {faq.answer}
+                </TableCell>
+                <TableCell className="py-4">
+                  <span className={`px-3 py-1 rounded-full text-xs font-semibold ${faq.isActive !== false ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                    {faq.isActive !== false ? 'Active' : 'Inactive'}
+                  </span>
                 </TableCell>
                 <TableCell className="py-4 pr-6 text-right">
                   <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -267,6 +274,8 @@ function FaqSection() {
 function FaqModal({ item, onClose, onSuccess }: { item: any; onClose: () => void; onSuccess: () => void }) {
   const [question, setQuestion] = useState(item?.question || "");
   const [answer, setAnswer] = useState(item?.answer || "");
+  const [order, setOrder] = useState(item?.order ?? 0);
+  const [isActive, setIsActive] = useState(item?.isActive ?? true);
   const [isLoading, setIsLoading] = useState(false);
 
   const [createFaq] = useCreateFaqMutation();
@@ -278,10 +287,10 @@ function FaqModal({ item, onClose, onSuccess }: { item: any; onClose: () => void
     setIsLoading(true);
     try {
       if (item) {
-        await updateFaq({ _id: item._id, data: { question, answer } }).unwrap();
+        await updateFaq({ _id: item._id, data: { question, answer, order: Number(order), isActive } }).unwrap();
         toast.success("FAQ updated successfully");
       } else {
-        await createFaq({ question, answer }).unwrap();
+        await createFaq({ question, answer, order: Number(order), isActive }).unwrap();
         toast.success("FAQ created successfully");
       }
       onSuccess();
@@ -321,6 +330,30 @@ function FaqModal({ item, onClose, onSuccess }: { item: any; onClose: () => void
               className="min-h-[140px] rounded-xl"
               required
             />
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="space-y-2 flex-1">
+              <Label className="font-bold text-gray-700">Display Order</Label>
+              <Input
+                type="number"
+                value={order}
+                onChange={(e) => setOrder(e.target.value)}
+                placeholder="0"
+                className="h-12 rounded-xl"
+              />
+            </div>
+            <div className="space-y-2 flex-1">
+              <Label className="font-bold text-gray-700 block mb-3">Status</Label>
+              <div className="flex items-center space-x-2 h-10">
+                <Switch
+                  checked={isActive}
+                  onCheckedChange={setIsActive}
+                />
+                <span className="text-sm text-gray-600 font-medium">
+                  {isActive ? "Active" : "Inactive"}
+                </span>
+              </div>
+            </div>
           </div>
           <div className="flex gap-3 pt-2">
             <Button type="button" variant="outline" onClick={onClose} className="flex-1 h-12 rounded-xl">

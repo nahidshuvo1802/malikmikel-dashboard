@@ -17,7 +17,10 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 // RTK Query Slices
-import { useGetWeeklyFeaturedServicesQuery, useUpdateServiceMutation } from "@/store/api/serviceApi";
+import {
+  useGetWeeklyFeaturedServicesQuery,
+  useUpdateServiceMutation,
+} from "@/store/api/serviceApi";
 import { useUpdateOfferMutation } from "@/store/api/offerApi";
 
 type SectionTab =
@@ -54,7 +57,7 @@ export default function FeaturedManagementPage() {
     try {
       const formDataToSend = new FormData();
       formDataToSend.append("isFeatured", "false");
-      
+
       await updateService({ id, formData: formDataToSend }).unwrap();
       toast.success("Item removed from featured list");
       refetchFeatured();
@@ -67,7 +70,7 @@ export default function FeaturedManagementPage() {
     try {
       const formDataToSend = new FormData();
       formDataToSend.append("isFeatured", "false");
-      
+
       await updateOffer({ id, data: formDataToSend }).unwrap();
       toast.success("Item removed from featured list");
       refetchFeatured();
@@ -114,18 +117,19 @@ export default function FeaturedManagementPage() {
   useEffect(() => {
     if (featuredResponse?.data) {
       const allItems = featuredResponse.data || [];
-      
+
       const filtered = allItems.filter((item: any) => {
         if (!item || item.isFeatured !== true) return false;
-        
+
         if (activeTab === "featured_offers") {
           return isOffer(item);
         }
-        
+
         if (isOffer(item)) return false;
 
-        const categoryName = item.cetagory?.name?.toLowerCase().replace(/\s+/g, "") || "";
-        
+        const categoryName =
+          item.cetagory?.name?.toLowerCase().replace(/\s+/g, "") || "";
+
         if (activeTab === "featured_eat&drink") {
           return categoryName === "eat&drink";
         }
@@ -135,7 +139,7 @@ export default function FeaturedManagementPage() {
         if (activeTab === "featured_events") {
           return categoryName === "events";
         }
-        
+
         return false;
       });
 
@@ -170,7 +174,8 @@ export default function FeaturedManagementPage() {
               Homepage Featured Items
             </h2>
             <p className="text-white/70 text-xs mt-0.5">
-              View all homepage featured items marked directly from services and offers management
+              View all homepage featured items marked directly from services and
+              offers management
             </p>
           </div>
         </div>
@@ -236,7 +241,8 @@ export default function FeaturedManagementPage() {
             <Star className="w-12 h-12 opacity-20 mb-2" />
             <p className="text-sm font-bold">No featured items configured</p>
             <p className="text-xs text-gray-400 mt-1">
-              Mark "Feature this on Homepage" inside service or offer settings to show items here
+              Mark "Feature this on Homepage" inside service or offer settings
+              to show items here
             </p>
           </div>
         ) : (

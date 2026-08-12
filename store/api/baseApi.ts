@@ -27,6 +27,8 @@ export const baseApi = createApi({
     "faq",
     "aboutUs",
     "termsAndConditions",
+    "legalPolicies",
+    "deleteAccount",
     "privacy",
     "contact",
     "blog",

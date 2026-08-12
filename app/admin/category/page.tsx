@@ -62,6 +62,8 @@ type ApiCategory = {
   name: string;
   image: string | null;
   description?: string;
+  bgColor?: string;
+  textColor?: string;
   createdAt: string;
   updatedAt: string;
 };
@@ -89,24 +91,31 @@ export default function CategoryPage() {
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
   // ── RTK Query ─────────────────────────────────────────────────────────────
-  const { data, isLoading, isError, refetch } = useGetAllCategoriesQuery({ 
-    page, 
+  const { data, isLoading, isError, refetch } = useGetAllCategoriesQuery({
+    page,
     limit,
-    searchTerm: debouncedSearchTerm 
+    searchTerm: debouncedSearchTerm,
   });
-  const [createCategory, { isLoading: isCreating }] = useCreateCategoryMutation();
-  const [deleteCategory, { isLoading: isDeleting }] = useDeleteCategoryMutation();
-  const [updateCategory, { isLoading: isUpdating }] = useUpdateCategoryMutation();
+  const [createCategory, { isLoading: isCreating }] =
+    useCreateCategoryMutation();
+  const [deleteCategory, { isLoading: isDeleting }] =
+    useDeleteCategoryMutation();
+  const [updateCategory, { isLoading: isUpdating }] =
+    useUpdateCategoryMutation();
 
   // ── Modal / form state ────────────────────────────────────────────────────
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<ModalMode>("create");
-  const [editingCategory, setEditingCategory] = useState<ApiCategory | null>(null);
+  const [editingCategory, setEditingCategory] = useState<ApiCategory | null>(
+    null,
+  );
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [bgColor, setBgColor] = useState("#f0f9ff");
+  const [textColor, setTextColor] = useState("#0369a1");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // ── Delete confirmation ───────────────────────────────────────────────────
@@ -133,6 +142,8 @@ export default function CategoryPage() {
     setDescription("");
     setImageFile(null);
     setImagePreview(null);
+    setBgColor("#f0f9ff");
+    setTextColor("#0369a1");
     setIsModalOpen(true);
   }
 
@@ -143,6 +154,8 @@ export default function CategoryPage() {
     setDescription(cat.description ?? "");
     setImageFile(null);
     setImagePreview(cat.image ? getImageUrl(cat.image) : null);
+    setBgColor(cat.bgColor || "#f0f9ff");
+    setTextColor(cat.textColor || "#0369a1");
     setIsModalOpen(true);
   }
 
@@ -170,13 +183,18 @@ export default function CategoryPage() {
     formData.append("name", name.trim());
     if (description.trim()) formData.append("description", description.trim());
     if (imageFile) formData.append("image", imageFile);
+    formData.append("bgColor", bgColor);
+    formData.append("textColor", textColor);
 
     try {
       if (modalMode === "create") {
         await createCategory(formData).unwrap();
         toast.success("Category created successfully");
       } else if (editingCategory) {
-        await updateCategory({ id: editingCategory._id, data: formData }).unwrap();
+        await updateCategory({
+          id: editingCategory._id,
+          data: formData,
+        }).unwrap();
         toast.success("Category updated successfully");
       }
       closeModal();
@@ -202,12 +220,13 @@ export default function CategoryPage() {
   // ── Render ────────────────────────────────────────────────────────────────
   return (
     <div className="min-h-screen bg-transparent p-6 space-y-6">
-
       {/* ── Stats ─────────────────────────────────────────────────────────── */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
           <div>
-            <h3 className="text-3xl font-bold text-gray-900">{meta?.total ?? "—"}</h3>
+            <h3 className="text-3xl font-bold text-gray-900">
+              {meta?.total ?? "—"}
+            </h3>
             <p className="text-gray-500 font-medium mt-1">Total Categories</p>
           </div>
           <div className="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center text-[#2E6F65]">
@@ -233,7 +252,7 @@ export default function CategoryPage() {
           <h2 className="text-white text-xl font-bold">Categories</h2>
           <div className="relative w-full sm:w-64">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-white/60 w-4 h-4" />
-            <input 
+            <input
               type="text"
               placeholder="Search categories..."
               value={searchTerm}
@@ -255,7 +274,12 @@ export default function CategoryPage() {
           <div className="flex-1 flex flex-col items-center justify-center gap-3 py-20 text-red-400">
             <AlertCircle className="w-8 h-8" />
             <p className="text-sm">Failed to load categories</p>
-            <Button variant="outline" size="sm" onClick={() => refetch()} className="gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => refetch()}
+              className="gap-2"
+            >
               <RefreshCw className="w-4 h-4" /> Retry
             </Button>
           </div>
@@ -270,17 +294,44 @@ export default function CategoryPage() {
               <Table>
                 <TableHeader className="bg-white">
                   <TableRow className="border-b border-[#2E6F65] hover:bg-transparent">
-                    <TableHead className={`font-semibold text-base py-5 ${textPrimary} pl-6`}>#</TableHead>
-                    <TableHead className={`font-semibold text-base py-5 ${textPrimary}`}>Image</TableHead>
-                    <TableHead className={`font-semibold text-base py-5 ${textPrimary}`}>Category Name</TableHead>
-                    <TableHead className={`font-semibold text-base py-5 ${textPrimary}`}>Description</TableHead>
-                    <TableHead className={`font-semibold text-base py-5 ${textPrimary}`}>Created</TableHead>
-                    <TableHead className={`font-semibold text-base py-5 ${textPrimary} text-right pr-6`}>Action</TableHead>
+                    <TableHead
+                      className={`font-semibold text-base py-5 ${textPrimary} pl-6`}
+                    >
+                      #
+                    </TableHead>
+                    <TableHead
+                      className={`font-semibold text-base py-5 ${textPrimary}`}
+                    >
+                      Image
+                    </TableHead>
+                    <TableHead
+                      className={`font-semibold text-base py-5 ${textPrimary}`}
+                    >
+                      Category Name
+                    </TableHead>
+                    <TableHead
+                      className={`font-semibold text-base py-5 ${textPrimary}`}
+                    >
+                      Description
+                    </TableHead>
+                    <TableHead
+                      className={`font-semibold text-base py-5 ${textPrimary}`}
+                    >
+                      Created
+                    </TableHead>
+                    <TableHead
+                      className={`font-semibold text-base py-5 ${textPrimary} text-right pr-6`}
+                    >
+                      Action
+                    </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {categories.map((cat, i) => (
-                    <TableRow key={cat._id} className="hover:bg-gray-50 border-b border-gray-100 last:border-0">
+                    <TableRow
+                      key={cat._id}
+                      className="hover:bg-gray-50 border-b border-gray-100 last:border-0"
+                    >
                       <TableCell className="font-medium text-gray-500 py-4 pl-6">
                         {(page - 1) * limit + i + 1}
                       </TableCell>
@@ -300,11 +351,15 @@ export default function CategoryPage() {
                           </div>
                         )}
                       </TableCell>
-                      <TableCell className="text-gray-900 font-semibold py-4">{cat.name}</TableCell>
+                      <TableCell className="text-gray-900 font-semibold py-4">
+                        {cat.name}
+                      </TableCell>
                       <TableCell className="text-gray-500 py-4 max-w-[200px] truncate">
                         {cat.description ?? "—"}
                       </TableCell>
-                      <TableCell className="text-gray-500 py-4 text-sm">{formatDate(cat.createdAt)}</TableCell>
+                      <TableCell className="text-gray-500 py-4 text-sm">
+                        {formatDate(cat.createdAt)}
+                      </TableCell>
                       <TableCell className="py-4 pr-6">
                         <div className="flex items-center justify-end gap-3">
                           <button
@@ -329,31 +384,50 @@ export default function CategoryPage() {
                   <PaginationItem>
                     <PaginationPrevious
                       href="#"
-                      onClick={(e) => { e.preventDefault(); setPage((p) => Math.max(1, p - 1)); }}
-                      className={page === 1 ? "pointer-events-none opacity-40" : "text-gray-500 hover:text-[#2E6F65]"}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setPage((p) => Math.max(1, p - 1));
+                      }}
+                      className={
+                        page === 1
+                          ? "pointer-events-none opacity-40"
+                          : "text-gray-500 hover:text-[#2E6F65]"
+                      }
                     />
                   </PaginationItem>
-                  {Array.from({ length: totalPages }, (_, idx) => idx + 1).map((pg) => (
-                    <PaginationItem key={pg}>
-                      <PaginationLink
-                        href="#"
-                        onClick={(e) => { e.preventDefault(); setPage(pg); }}
-                        isActive={pg === page}
-                        className={
-                          pg === page
-                            ? "bg-[#2E6F65] text-white hover:bg-[#2E6F65]/90 hover:text-white border-0"
-                            : "text-gray-500 hover:text-[#2E6F65]"
-                        }
-                      >
-                        {pg}
-                      </PaginationLink>
-                    </PaginationItem>
-                  ))}
+                  {Array.from({ length: totalPages }, (_, idx) => idx + 1).map(
+                    (pg) => (
+                      <PaginationItem key={pg}>
+                        <PaginationLink
+                          href="#"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setPage(pg);
+                          }}
+                          isActive={pg === page}
+                          className={
+                            pg === page
+                              ? "bg-[#2E6F65] text-white hover:bg-[#2E6F65]/90 hover:text-white border-0"
+                              : "text-gray-500 hover:text-[#2E6F65]"
+                          }
+                        >
+                          {pg}
+                        </PaginationLink>
+                      </PaginationItem>
+                    ),
+                  )}
                   <PaginationItem>
                     <PaginationNext
                       href="#"
-                      onClick={(e) => { e.preventDefault(); setPage((p) => Math.min(totalPages, p + 1)); }}
-                      className={page === totalPages ? "pointer-events-none opacity-40" : "text-gray-500 hover:text-[#2E6F65]"}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setPage((p) => Math.min(totalPages, p + 1));
+                      }}
+                      className={
+                        page === totalPages
+                          ? "pointer-events-none opacity-40"
+                          : "text-gray-500 hover:text-[#2E6F65]"
+                      }
                     />
                   </PaginationItem>
                 </PaginationContent>
@@ -367,20 +441,23 @@ export default function CategoryPage() {
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg animate-in fade-in zoom-in duration-200">
-
             {/* Modal Header */}
-            <div className={`${buttonbg} rounded-t-2xl px-6 py-4 flex items-center justify-between`}>
+            <div
+              className={`${buttonbg} rounded-t-2xl px-6 py-4 flex items-center justify-between`}
+            >
               <h2 className="text-white text-lg font-bold">
                 {modalMode === "create" ? "Add New Category" : "Edit Category"}
               </h2>
-              <button onClick={closeModal} className="text-white/80 hover:text-white">
+              <button
+                onClick={closeModal}
+                className="text-white/80 hover:text-white"
+              >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {/* Modal Body */}
             <div className="p-6 space-y-5">
-
               {/* Image Upload */}
               <div className="space-y-2">
                 <Label>Category Image</Label>
@@ -390,9 +467,16 @@ export default function CategoryPage() {
                 >
                   {imagePreview ? (
                     <>
-                      <Image src={imagePreview} alt="Preview" fill className="object-cover" />
+                      <Image
+                        src={imagePreview}
+                        alt="Preview"
+                        fill
+                        className="object-cover"
+                      />
                       <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
-                        <p className="text-white text-sm font-semibold">Change Image</p>
+                        <p className="text-white text-sm font-semibold">
+                          Change Image
+                        </p>
                       </div>
                     </>
                   ) : (
@@ -414,7 +498,9 @@ export default function CategoryPage() {
 
               {/* Name */}
               <div className="space-y-2">
-                <Label htmlFor="cat-name">Category Name <span className="text-red-500">*</span></Label>
+                <Label htmlFor="cat-name">
+                  Category Name <span className="text-red-500">*</span>
+                </Label>
                 <Input
                   id="cat-name"
                   placeholder="Enter category name"
@@ -424,7 +510,8 @@ export default function CategoryPage() {
                 />
                 {modalMode === "edit" && (
                   <p className="text-xs text-amber-600 font-medium">
-                    Category name cannot be changed to ensure consistency across the application.
+                    Category name cannot be changed to ensure consistency across
+                    the application.
                   </p>
                 )}
               </div>
@@ -439,6 +526,59 @@ export default function CategoryPage() {
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                 />
+              </div>
+
+              {/* Colors */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="bg-color">Background Color</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      id="bg-color"
+                      type="color"
+                      value={bgColor}
+                      onChange={(e) => setBgColor(e.target.value)}
+                      className="w-12 h-11 p-1 cursor-pointer"
+                    />
+                    <Input
+                      type="text"
+                      value={bgColor}
+                      onChange={(e) => setBgColor(e.target.value)}
+                      className="flex-1 font-mono uppercase text-sm"
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="text-color">Text Color</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      id="text-color"
+                      type="color"
+                      value={textColor}
+                      onChange={(e) => setTextColor(e.target.value)}
+                      className="w-12 h-11 p-1 cursor-pointer"
+                    />
+                    <Input
+                      type="text"
+                      value={textColor}
+                      onChange={(e) => setTextColor(e.target.value)}
+                      className="flex-1 font-mono uppercase text-sm"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Preview */}
+              <div className="space-y-2">
+                <Label>Badge Preview</Label>
+                <div className="p-4 rounded-xl border border-gray-100 flex items-center justify-center bg-gray-50/50">
+                  <div
+                    className="px-4 py-1.5 rounded-full font-semibold text-sm shadow-sm transition-colors"
+                    style={{ backgroundColor: bgColor, color: textColor }}
+                  >
+                    {name || "Category Name"}
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -462,7 +602,11 @@ export default function CategoryPage() {
                     <Loader className="w-4 h-4 animate-spin" />
                     {modalMode === "create" ? "Creating…" : "Saving…"}
                   </span>
-                ) : modalMode === "create" ? "Create Category" : "Save Changes"}
+                ) : modalMode === "create" ? (
+                  "Create Category"
+                ) : (
+                  "Save Changes"
+                )}
               </Button>
             </div>
           </div>
@@ -470,14 +614,19 @@ export default function CategoryPage() {
       )}
 
       {/* ── Delete Confirmation Dialog ─────────────────────────────────────── */}
-      <AlertDialog open={!!deleteTarget} onOpenChange={(open) => !open && setDeleteTarget(null)}>
+      <AlertDialog
+        open={!!deleteTarget}
+        onOpenChange={(open) => !open && setDeleteTarget(null)}
+      >
         <AlertDialogContent className="bg-white">
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Category</AlertDialogTitle>
             <AlertDialogDescription>
               Are you sure you want to delete{" "}
-              <span className="font-semibold text-gray-800">{deleteTarget?.name}</span>?
-              This action cannot be undone.
+              <span className="font-semibold text-gray-800">
+                {deleteTarget?.name}
+              </span>
+              ? This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -491,12 +640,13 @@ export default function CategoryPage() {
                 <span className="flex items-center gap-2">
                   <Loader className="w-4 h-4 animate-spin" /> Deleting…
                 </span>
-              ) : "Delete"}
+              ) : (
+                "Delete"
+              )}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-
     </div>
   );
 }

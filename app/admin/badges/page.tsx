@@ -239,6 +239,9 @@ const AddBadgeModal = ({ isOpen, onClose, onSubmit }: { isOpen: boolean; onClose
   const [isLoading, setIsLoading] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
   const [showNote, setShowNote] = useState(true);
+  const [title, setTitle] = useState("");
+  const [bgColor, setBgColor] = useState("#fffbeb");
+  const [textColor, setTextColor] = useState("#b45309");
   
   if (!isOpen) return null;
 
@@ -276,7 +279,75 @@ const AddBadgeModal = ({ isOpen, onClose, onSubmit }: { isOpen: boolean; onClose
                   <div className="space-y-4">
                       <div className="space-y-1.5">
                         <Label htmlFor="title" className="font-bold text-gray-700">Badge Title</Label>
-                        <Input id="title" name="title" required placeholder="Enter badge title" className="h-11 rounded-xl" />
+                        <Input 
+                          id="title" 
+                          name="title" 
+                          required 
+                          placeholder="Enter badge title" 
+                          className="h-11 rounded-xl" 
+                          value={title}
+                          onChange={(e) => setTitle(e.target.value)}
+                        />
+                      </div>
+                      
+                      {/* Colors */}
+                      <div className="grid grid-cols-2 gap-4 pt-2">
+                        <div className="space-y-2">
+                          <Label htmlFor="bg-color">Background Color</Label>
+                          <div className="flex gap-2">
+                            <Input
+                              id="bg-color"
+                              name="bgColor"
+                              type="color"
+                              value={bgColor}
+                              onChange={(e) => setBgColor(e.target.value)}
+                              className="w-12 h-11 p-1 cursor-pointer"
+                            />
+                            <Input
+                              type="text"
+                              value={bgColor}
+                              onChange={(e) => setBgColor(e.target.value)}
+                              className="flex-1 font-mono uppercase text-sm"
+                            />
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="text-color">Text Color</Label>
+                          <div className="flex gap-2">
+                            <Input
+                              id="text-color"
+                              name="textColor"
+                              type="color"
+                              value={textColor}
+                              onChange={(e) => setTextColor(e.target.value)}
+                              className="w-12 h-11 p-1 cursor-pointer"
+                            />
+                            <Input
+                              type="text"
+                              value={textColor}
+                              onChange={(e) => setTextColor(e.target.value)}
+                              className="flex-1 font-mono uppercase text-sm"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Preview */}
+                      <div className="space-y-2 pt-2">
+                        <Label>Badge Preview</Label>
+                        <div className="p-4 rounded-xl border border-gray-100 flex items-center justify-center bg-gray-50/50">
+                          <div 
+                            className="px-4 py-1.5 rounded-full font-semibold text-sm shadow-sm transition-colors flex items-center gap-2"
+                            style={{ backgroundColor: bgColor, color: textColor }}
+                          >
+                            {preview ? (
+                                <img src={preview} alt="icon" className="w-4 h-4 object-contain" />
+                            ) : (
+                                <Award className="w-4 h-4" />
+                            )}
+                            {title || "Badge Title"}
+                          </div>
+                        </div>
                       </div>
                       
                       <div className="flex items-center gap-6 pt-2">
