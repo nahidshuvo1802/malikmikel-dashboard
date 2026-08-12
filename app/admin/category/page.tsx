@@ -64,6 +64,8 @@ type ApiCategory = {
   description?: string;
   bgColor?: string;
   textColor?: string;
+  pageTitle?: string;
+  pageDescription?: string;
   createdAt: string;
   updatedAt: string;
 };
@@ -112,6 +114,8 @@ export default function CategoryPage() {
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [pageTitle, setPageTitle] = useState("");
+  const [pageDescription, setPageDescription] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [bgColor, setBgColor] = useState("#f0f9ff");
@@ -140,6 +144,8 @@ export default function CategoryPage() {
     setEditingCategory(null);
     setName("");
     setDescription("");
+    setPageTitle("");
+    setPageDescription("");
     setImageFile(null);
     setImagePreview(null);
     setBgColor("#f0f9ff");
@@ -152,6 +158,8 @@ export default function CategoryPage() {
     setEditingCategory(cat);
     setName(cat.name);
     setDescription(cat.description ?? "");
+    setPageTitle(cat.pageTitle ?? "");
+    setPageDescription(cat.pageDescription ?? "");
     setImageFile(null);
     setImagePreview(cat.image ? getImageUrl(cat.image) : null);
     setBgColor(cat.bgColor || "#f0f9ff");
@@ -182,6 +190,8 @@ export default function CategoryPage() {
     const formData = new FormData();
     formData.append("name", name.trim());
     if (description.trim()) formData.append("description", description.trim());
+    if (pageTitle.trim()) formData.append("pageTitle", pageTitle.trim());
+    if (pageDescription.trim()) formData.append("pageDescription", pageDescription.trim());
     if (imageFile) formData.append("image", imageFile);
     formData.append("bgColor", bgColor);
     formData.append("textColor", textColor);
@@ -518,14 +528,42 @@ export default function CategoryPage() {
 
               {/* Description */}
               <div className="space-y-2">
-                <Label htmlFor="cat-desc">Description</Label>
+                <Label htmlFor="cat-desc">Internal Description</Label>
                 <Textarea
                   id="cat-desc"
-                  placeholder="Enter category description"
-                  className="min-h-[90px] resize-none"
+                  placeholder="Enter internal category description"
+                  className="min-h-[70px] resize-none"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                 />
+              </div>
+
+              <hr className="border-gray-100" />
+
+              {/* Page Header Content */}
+              <div className="space-y-4 bg-gray-50/80 p-4 rounded-xl border border-gray-100">
+                <h3 className="font-bold text-gray-800 text-sm">Frontend Page Header (App)</h3>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="page-title">Main Title</Label>
+                  <Input
+                    id="page-title"
+                    placeholder="E.g. Experiences or Events"
+                    value={pageTitle}
+                    onChange={(e) => setPageTitle(e.target.value)}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="page-desc">Supporting Description</Label>
+                  <Textarea
+                    id="page-desc"
+                    placeholder="E.g. Handpicked experiences. Designed to be felt, not visited."
+                    className="min-h-[70px] resize-none"
+                    value={pageDescription}
+                    onChange={(e) => setPageDescription(e.target.value)}
+                  />
+                </div>
               </div>
 
               {/* Colors */}
