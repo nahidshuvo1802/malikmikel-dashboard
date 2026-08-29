@@ -96,8 +96,8 @@ export const AddServiceModal = ({
           lng: serviceToEdit.longitude || "",
         });
         setOperatingHours({
-          open: serviceToEdit.openTime || "",
-          close: serviceToEdit.closeTime || "",
+          open: convertTo24Hour(serviceToEdit.openTime),
+          close: convertTo24Hour(serviceToEdit.closeTime),
         });
         setPlaceData({
           rating: serviceToEdit.averageRating || 0,
@@ -355,6 +355,26 @@ export const AddServiceModal = ({
     h = h % 12;
     h = h ? h : 12;
     return `${h.toString().padStart(2, "0")}:${minutes} ${ampm}`;
+  };
+
+  const convertTo24Hour = (timeStr: string | undefined | null) => {
+    if (!timeStr) return "";
+    const match = timeStr.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+    if (!match) {
+      if (/^\d{2}:\d{2}$/.test(timeStr)) {
+        return timeStr;
+      }
+      return "";
+    }
+    let [_, hoursStr, minutes, ampm] = match;
+    let hours = parseInt(hoursStr, 10);
+    ampm = ampm.toUpperCase();
+    if (ampm === "PM" && hours < 12) {
+      hours += 12;
+    } else if (ampm === "AM" && hours === 12) {
+      hours = 0;
+    }
+    return `${hours.toString().padStart(2, "0")}:${minutes}`;
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -885,7 +905,7 @@ export const AddServiceModal = ({
                     <Input
                       type="time"
                       name="startTime"
-                      defaultValue={serviceToEdit?.startTime || ""}
+                      defaultValue={convertTo24Hour(serviceToEdit?.startTime)}
                       className="h-12 rounded-xl border-[#2E6F65]/30 bg-green-50/30"
                     />
                   </div>
@@ -896,7 +916,7 @@ export const AddServiceModal = ({
                     <Input
                       type="time"
                       name="endTime"
-                      defaultValue={serviceToEdit?.endTime || ""}
+                      defaultValue={convertTo24Hour(serviceToEdit?.endTime)}
                       className="h-12 rounded-xl border-[#2E6F65]/30 bg-green-50/30"
                     />
                   </div>

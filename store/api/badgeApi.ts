@@ -41,6 +41,16 @@ export const badgeApi = baseApi.injectEndpoints({
             invalidatesTags: ["badge"],
         }),
 
+        // Update badge
+        updateBadge: builder.mutation({
+            query: ({ id, formData }) => ({
+                url: `badge/update-badge/${id}`,
+                method: "PATCH",
+                body: formData, // Multipart/FormData
+            }),
+            invalidatesTags: ["badge"],
+        }),
+
         // Delete badge
         deleteBadge: builder.mutation({
             query: (id) => ({
@@ -58,6 +68,7 @@ export const {
     useCreateBadgeMutation,
     useAddCriteriaMutation,
     useDeleteBadgeMutation,
+    useUpdateBadgeMutation,
 } = badgeApi;
 
 export default badgeApi;
