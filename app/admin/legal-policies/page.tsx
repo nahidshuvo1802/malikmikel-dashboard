@@ -68,6 +68,7 @@ interface LegalDocItem {
   image?: string;
   icon?: string;
   webUrl?: string;
+  pdfUrl?: string;
   externalLinks?: ExternalLinkItem[];
   order?: number;
   isPublished?: boolean;
@@ -99,6 +100,8 @@ export default function LegalPoliciesPage() {
   const [bodyContent, setBodyContent] = useState("");
   const [order, setOrder] = useState<number>(0);
   const [isPublished, setIsPublished] = useState<boolean>(true);
+  const [webUrl, setWebUrl] = useState<string>("");
+  const [pdfUrl, setPdfUrl] = useState<string>("");
   const [externalLinks, setExternalLinks] = useState<ExternalLinkItem[]>([]);
 
   // Image states
@@ -120,6 +123,8 @@ export default function LegalPoliciesPage() {
     setBodyContent("");
     setOrder(documents.length + 1);
     setIsPublished(true);
+    setWebUrl("");
+    setPdfUrl("");
     setExternalLinks([]);
     setImageFile(null);
     setImagePreview("");
@@ -133,6 +138,8 @@ export default function LegalPoliciesPage() {
     setTitle(doc.title || "");
     setContentSlug(doc.content || "");
     setSubtitle(doc.subtitle || "");
+    setWebUrl(doc.webUrl || "");
+    setPdfUrl(doc.pdfUrl || "");
     setBodyContent(doc.description || "");
     setOrder(doc.order ?? 0);
     setIsPublished(doc.isPublished !== false);
@@ -227,6 +234,8 @@ export default function LegalPoliciesPage() {
     formData.append("title", title.trim());
     formData.append("content", contentSlug.trim() || title.toLowerCase().replace(/[^a-z0-9]+/g, "_"));
     formData.append("subtitle", subtitle.trim());
+    formData.append("webUrl", webUrl.trim());
+    formData.append("pdfUrl", pdfUrl.trim());
     formData.append("description", bodyContent);
     formData.append("order", String(order));
     formData.append("isPublished", String(isPublished));
