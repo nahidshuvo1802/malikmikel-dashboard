@@ -64,13 +64,13 @@ export default function SettingsPage() {
             </Link>
           </li>
           
-          {/* Legal & Compliance */}
+          {/* Legal & Policies */}
           <li>
             <Link
               href="/admin/legal-policies"
               className="flex items-center justify-between px-6 py-5 hover:bg-gray-50 transition group"
             >
-              <span className="text-gray-700 font-medium text-base group-hover:text-blue-600 transition-colors">Legal & Compliance</span>
+              <span className="text-gray-700 font-medium text-base group-hover:text-blue-600 transition-colors">Legal & Policies</span>
               <ChevronRight className="text-gray-400 group-hover:text-blue-600 transition-colors w-5 h-5" />
             </Link>
           </li>

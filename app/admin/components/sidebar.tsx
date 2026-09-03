@@ -78,7 +78,7 @@ export default function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
     { name: "Report",          path: "/admin/report",          icon: BarChart },
     { name: "Reviews",         path: "/admin/review",          icon: Star },
     { name: "Create Admin",    path: "/admin/create-admin",    icon: ShieldCheck },
-    { name: "Legal & Compliance", path: "/admin/legal-policies",  icon: FileText },
+    { name: "Legal & Policies", path: "/admin/legal-policies",  icon: FileText },
     { name: "Settings",        path: "/admin/settings",        icon: Settings },
   ];
 
@@ -124,14 +124,14 @@ export default function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
             {navItems.map((item) => (
             <Link key={item.path} href={item.path} className="block relative z-10">
                 <div
-                    className={`flex items-center gap-2 px-3 h-12 rounded-lg cursor-pointer transition-colors duration-500 ${
+                    className={`flex items-center gap-2.5 px-3 h-12 rounded-lg cursor-pointer transition-colors duration-500 min-w-0 ${
                     isActive(item.path)
                         ? "text-white"
                         : "text-gray-500 hover:text-gray-700 hover:bg-gray-100/50"
                     }`}
                 >
-                    <item.icon className="w-5 h-5" />
-                    <p className={`text-lg font-semibold`}>{item.name}</p>
+                    <item.icon className="w-5 h-5 flex-shrink-0" />
+                    <p className={`text-[15px] font-semibold whitespace-nowrap truncate`}>{item.name}</p>
                 </div>
             </Link>
             ))}
