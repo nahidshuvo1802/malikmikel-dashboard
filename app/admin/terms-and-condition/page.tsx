@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -34,9 +34,9 @@ export default function TermsAndConditionsPage() {
     setIsSubmitting(true);
     try {
       await updateTerms({ description: content }).unwrap();
-      toast.success("Terms & Conditions updated successfully!");
+      toast.success("Terms of Use updated successfully!");
     } catch (error) {
-      toast.error("Failed to update Terms & Conditions");
+      toast.error("Failed to update Terms of Use");
     } finally {
       setIsSubmitting(false);
     }
@@ -60,7 +60,7 @@ export default function TermsAndConditionsPage() {
         >
           <ChevronLeft className="w-6 h-6" />
         </button>
-        <h1 className="text-white text-xl sm:text-2xl font-bold">Terms & Conditions</h1>
+        <h1 className="text-white text-xl sm:text-2xl font-bold">Terms of Use</h1>
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 h-full mb-6">

@@ -40,14 +40,14 @@ export default function SettingsPage() {
             </Link>
           </li>
           
-          {/* Terms & Conditions */}
+          {/* Terms of Use */}
           <li>
             <Link
               href="/admin/terms-and-condition"
               className="flex items-center justify-between px-6 py-5 hover:bg-gray-50 transition group"
             >
               <span className="text-gray-700 font-medium text-base group-hover:text-blue-600 transition-colors">
-                Terms & Conditions
+                Terms of Use
               </span>
               <ChevronRight className="text-gray-400 group-hover:text-blue-600 transition-colors w-5 h-5" />
             </Link>

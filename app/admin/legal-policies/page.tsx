@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useRef, ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
@@ -555,7 +555,7 @@ export default function LegalPoliciesPage() {
                 id="title"
                 value={title}
                 onChange={(e) => handleTitleChange(e.target.value)}
-                placeholder="e.g. Terms &amp; Conditions, Community Guidelines, Cookie Policy..."
+                placeholder="e.g. Terms of Use, Community Guidelines, Cookie Policy..."
                 className="h-11"
               />
             </div>
