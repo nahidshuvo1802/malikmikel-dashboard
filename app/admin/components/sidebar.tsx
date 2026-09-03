@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -78,6 +78,7 @@ export default function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
     { name: "Report",          path: "/admin/report",          icon: BarChart },
     { name: "Reviews",         path: "/admin/review",          icon: Star },
     { name: "Create Admin",    path: "/admin/create-admin",    icon: ShieldCheck },
+    { name: "Legal Documents", path: "/admin/legal-policies",  icon: FileText },
     { name: "Settings",        path: "/admin/settings",        icon: Settings },
   ];
 
