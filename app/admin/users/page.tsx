@@ -29,44 +29,113 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Eye, Ban, Search, X, Trash2 } from "lucide-react";
+import { Eye, Ban, Search, X, Trash2, CheckCircle2, XCircle, ShieldCheck, History } from "lucide-react";
 import { useAuth } from "@/contexts/auth-context";
 import { useRouter } from "next/navigation";
 import { useGetAllUserQuery, useChangeStatusMutation, useDeleteUserMutation } from "@/store/api/userApi";
 import { Loader } from "@/components/ui/loader";
 import { toast } from "sonner"; // Assuming sonner is used for notifications based on common project patterns
 
-// Custom Modal for User Details
+// Custom Modal for User Details with Marketing Consent Audit Record
 const UserDetailModal = ({ isOpen, onClose, user }: { isOpen: boolean; onClose: () => void; user: any }) => {
   if (!isOpen) return null;
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-      <div className="bg-white rounded-xl shadow-lg w-full max-w-md p-6 relative animate-in fade-in zoom-in duration-200">
-        <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+      <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto p-6 relative animate-in fade-in zoom-in duration-200">
+        <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 p-1 hover:bg-gray-100 rounded-full transition-colors">
           <X className="w-5 h-5" />
         </button>
         <div className="text-center">
-            <div className="w-20 h-20 bg-gray-200 rounded-full mx-auto mb-4 overflow-hidden relative">
-                 <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-xl font-bold">
-                    {user?.userName?.charAt(0)?.toUpperCase()}
-                 </div>
-            </div>
+          <div className="w-20 h-20 bg-gradient-to-tr from-[#2E6F65] to-[#58976B] text-white rounded-full mx-auto mb-3 flex items-center justify-center text-2xl font-bold shadow-md">
+            {user?.userName?.charAt(0)?.toUpperCase() || "U"}
+          </div>
           <h3 className="text-xl font-bold text-[#2E6F65]">{user?.userName}</h3>
-          <p className="text-sm text-gray-500 mb-6">{user?.email}</p>
+          <p className="text-sm text-gray-500 mb-5">{user?.email}</p>
           
-          <div className="space-y-3 text-left">
-             <div className="flex justify-between border-b pb-2">
+          {/* General Information */}
+          <div className="space-y-2.5 text-left text-sm bg-gray-50 p-4 rounded-xl mb-4 border border-gray-100">
+             <div className="flex justify-between border-b border-gray-200/60 pb-2">
                 <span className="text-gray-500">Phone</span>
-                <span className="font-medium">{user?.phone || "N/A"}</span>
+                <span className="font-medium text-gray-800">{user?.phone || "N/A"}</span>
              </div>
-             <div className="flex justify-between border-b pb-2">
+             <div className="flex justify-between border-b border-gray-200/60 pb-2">
+                <span className="text-gray-500">Country</span>
+                <span className="font-medium text-gray-800">{user?.country || "N/A"}</span>
+             </div>
+             <div className="flex justify-between border-b border-gray-200/60 pb-2">
                 <span className="text-gray-500">Joined Date</span>
-                <span className="font-medium">{user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : "N/A"}</span>
+                <span className="font-medium text-gray-800">{user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : "N/A"}</span>
              </div>
-             <div className="flex justify-between border-b pb-2">
+             <div className="flex justify-between">
                 <span className="text-gray-500">Last Active</span>
-                <span className="font-medium">{user?.updatedAt ? new Date(user.updatedAt).toLocaleDateString() : "N/A"}</span>
+                <span className="font-medium text-gray-800">{user?.updatedAt ? new Date(user.updatedAt).toLocaleDateString() : "N/A"}</span>
              </div>
+          </div>
+
+          {/* Marketing Consent & Audit Record Section */}
+          <div className="text-left border border-gray-200 rounded-xl p-4 bg-white shadow-sm space-y-3">
+             <div className="flex items-center justify-between border-b border-gray-150 pb-2.5">
+                <div className="flex items-center gap-2">
+                  <ShieldCheck className="w-4 h-4 text-[#2E6F65]" />
+                  <span className="font-semibold text-gray-900 text-sm">Marketing Consent</span>
+                </div>
+                {user?.marketingConsent ? (
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                    Subscribed (Opted In)
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+                    <XCircle className="w-3.5 h-3.5 text-gray-400" />
+                    Not Subscribed (Opted Out)
+                  </span>
+                )}
+             </div>
+
+             <div className="space-y-2 text-xs">
+                <div className="flex justify-between">
+                  <span className="text-gray-500">Consent Updated:</span>
+                  <span className="font-medium text-gray-700">
+                    {user?.marketingConsentUpdatedAt
+                      ? new Date(user.marketingConsentUpdatedAt).toLocaleString()
+                      : (user?.createdAt ? new Date(user.createdAt).toLocaleString() : "N/A")}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-500">Consent Version:</span>
+                  <span className="font-medium text-gray-700">{user?.marketingConsentVersion || "1.0"}</span>
+                </div>
+                <div>
+                  <span className="text-gray-500 block mb-1">Consent Wording Shown:</span>
+                  <p className="text-[11px] text-gray-600 bg-gray-50 p-2.5 rounded-lg border border-gray-200/80 italic leading-relaxed">
+                    "{user?.marketingConsentWording || "I’d like to receive news, offers, promotions and updates from Caribee by email and other electronic communications."}"
+                  </p>
+                </div>
+             </div>
+
+             {/* Audit History Log */}
+             {user?.marketingConsentHistory && user.marketingConsentHistory.length > 0 && (
+                <div className="pt-2.5 border-t border-gray-150">
+                   <span className="text-xs font-semibold text-gray-700 flex items-center gap-1.5 mb-2">
+                     <History className="w-3.5 h-3.5 text-[#2E6F65]" />
+                     Consent Audit Log ({user.marketingConsentHistory.length} {user.marketingConsentHistory.length === 1 ? "event" : "events"})
+                   </span>
+                   <div className="space-y-1.5 max-h-36 overflow-y-auto pr-1">
+                      {user.marketingConsentHistory.slice().reverse().map((entry: any, idx: number) => (
+                        <div key={idx} className="flex items-center justify-between text-[11px] bg-gray-50 px-2.5 py-1.5 rounded border border-gray-150">
+                           <div className="flex items-center gap-1.5">
+                              <span className={`w-2 h-2 rounded-full ${entry.consent ? "bg-emerald-500" : "bg-gray-400"}`} />
+                              <span className="font-medium text-gray-800">{entry.consent ? "Opted In" : "Opted Out"}</span>
+                              <span className="text-gray-400 capitalize">({entry.source || "system"})</span>
+                           </div>
+                           <span className="text-gray-500">
+                             {entry.timestamp ? new Date(entry.timestamp).toLocaleString() : ""}
+                           </span>
+                        </div>
+                      ))}
+                   </div>
+                </div>
+             )}
           </div>
         </div>
       </div>
@@ -199,19 +268,20 @@ export default function UsersPage() {
                         <TableHead className="text-[#58976B] font-semibold text-base py-5">Email</TableHead>
                         <TableHead className="text-[#58976B] font-semibold text-base py-5">Phone No</TableHead>
                         <TableHead className="text-[#58976B] font-semibold text-base py-5">Joined Date</TableHead>
+                        <TableHead className="text-[#58976B] font-semibold text-base py-5">Marketing Consent</TableHead>
                         <TableHead className="text-[#58976B] font-semibold text-base text-center py-5">Action</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {isLoading ? (
                         <TableRow>
-                            <TableCell colSpan={6} className="text-center py-20">
+                            <TableCell colSpan={7} className="text-center py-20">
                                 <Loader />
                             </TableCell>
                         </TableRow>
                     ) : usersData.length === 0 ? (
                         <TableRow>
-                            <TableCell colSpan={6} className="text-center py-20 text-gray-500">
+                            <TableCell colSpan={7} className="text-center py-20 text-gray-500">
                                 No users found
                             </TableCell>
                         </TableRow>
@@ -234,6 +304,19 @@ export default function UsersPage() {
                              <TableCell className="text-gray-600 py-4">{u.phone || "N/A"}</TableCell>
                              <TableCell className="text-gray-600 py-4">
                                 {u.createdAt ? new Date(u.createdAt).toLocaleDateString() : "N/A"}
+                             </TableCell>
+                             <TableCell className="py-4">
+                                {u.marketingConsent ? (
+                                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                                        Subscribed
+                                    </span>
+                                ) : (
+                                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600 border border-gray-200">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-gray-400" />
+                                        Not Subscribed
+                                    </span>
+                                )}
                              </TableCell>
                              <TableCell className="py-4">
                                 <div className="flex items-center justify-center gap-3">
